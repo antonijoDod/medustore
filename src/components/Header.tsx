@@ -262,26 +262,26 @@ const Header: FC<HeaderProps> = ({ position, logoIsDark, textColor }) => {
                             <Box mr="4">
                                 {isScrolled ? (
                                     <Image
-                                        src="/assets/images/logo-black.png"
+                                        src="/assets/svg/logo-black.svg"
                                         layout="fixed"
-                                        height="22"
-                                        width="76"
+                                        height="36"
+                                        width="174"
                                         alt="White logo"
                                     />
                                 ) : logoIsDark ? (
                                     <Image
-                                        src="/assets/images/logo-black.png"
+                                        src="/assets/svg/logo-black.svg"
                                         layout="fixed"
-                                        height="22"
-                                        width="76"
+                                        height="36"
+                                        width="174"
                                         alt="White logo"
                                     />
                                 ) : (
                                     <Image
-                                        src="/assets/images/logo-white.png"
+                                        src="/assets/svg/logo-white.svg"
                                         layout="fixed"
-                                        height="22"
-                                        width="76"
+                                        height="36"
+                                        width="174"
                                         alt="White logo"
                                     />
                                 )}

@@ -40,7 +40,6 @@ interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = ({ allProducts }) => {
-    console.log("🚀 ~ file: index.tsx ~ line 43 ~ allProducts", allProducts);
     return (
         <Layout
             headerPosition="absolute"
@@ -236,14 +235,11 @@ const Home: React.FC<HomeProps> = ({ allProducts }) => {
                                             <ProductItem
                                                 key={product.id}
                                                 title={product.title}
-                                                slug={product.handle}
+                                                slug={product.id}
                                                 thumbnail={product.thumbnail}
                                                 price={getSmallestVariantPrice(
                                                     product.variants,
                                                 )}
-                                                /* price={formatPrice(
-                                                    product.variants[0],
-                                                )} */
                                             />
                                         ),
                                     )}

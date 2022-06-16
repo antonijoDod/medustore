@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import { Layout, RadioCard, Button } from "@components";
 import {
     Box,
@@ -21,8 +21,12 @@ import {
     Flex,
     HStack,
 } from "@chakra-ui/react";
+
 import Image from "next/image";
 import NextLink from "next/link";
+import { medusaServer } from "src/utils/medusaServer";
+import { Product as TProduct } from "@medusajs/medusa";
+
 import {
     MdOutlineHorizontalRule,
     MdOutlineAdd,
@@ -37,7 +41,11 @@ import "swiper/css/thumbs";
 
 import { FreeMode, Navigation, Thumbs } from "swiper";
 
-const Product = () => {
+interface ProductProps {
+    product: TProduct;
+}
+
+const Product: FC<ProductProps> = ({ product }) => {
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
     const productColorOptions = ["white", "red", "blue", "green"];
 
@@ -83,7 +91,7 @@ const Product = () => {
 
                             <BreadcrumbItem isCurrentPage>
                                 <BreadcrumbLink href="#">
-                                    Product title
+                                    {product.title}
                                 </BreadcrumbLink>
                             </BreadcrumbItem>
                         </Breadcrumb>
@@ -95,47 +103,37 @@ const Product = () => {
                 <SimpleGrid columns={{ base: 1, md: 2 }} gap="8">
                     {/* Left side */}
                     <Box>
+                        {product.images.length === 0 && (
+                            <Image src="/assets/images/placeholder_300x300.png" />
+                        )}
                         <Swiper
                             style={{
                                 "--swiper-navigation-color": "#fff",
                                 "--swiper-pagination-color": "#fff",
+                                height: 500,
                             }}
                             spaceBetween={10}
                             navigation={true}
                             thumbs={{ swiper: thumbsSwiper }}
                             modules={[FreeMode, Navigation, Thumbs]}
-                            className="mySwiper2"
                         >
-                            <SwiperSlide>
-                                <img src="https://swiperjs.com/demos/images/nature-1.jpg" />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://swiperjs.com/demos/images/nature-2.jpg" />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://swiperjs.com/demos/images/nature-3.jpg" />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://swiperjs.com/demos/images/nature-4.jpg" />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://swiperjs.com/demos/images/nature-5.jpg" />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://swiperjs.com/demos/images/nature-6.jpg" />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://swiperjs.com/demos/images/nature-7.jpg" />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://swiperjs.com/demos/images/nature-8.jpg" />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://swiperjs.com/demos/images/nature-9.jpg" />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://swiperjs.com/demos/images/nature-10.jpg" />
-                            </SwiperSlide>
+                            {product.images.map((image) => (
+                                <SwiperSlide
+                                    key={image.id}
+                                    style={{
+                                        position: "relative",
+                                        height: "100%",
+                                    }}
+                                >
+                                    <Image
+                                        src={image.url}
+                                        alt={product.title}
+                                        layout="fill"
+                                        objectFit="cover"
+                                        objectPosition="center"
+                                    />
+                                </SwiperSlide>
+                            ))}
                         </Swiper>
                         <Swiper
                             onSwiper={setThumbsSwiper}
@@ -144,38 +142,25 @@ const Product = () => {
                             freeMode={true}
                             watchSlidesProgress={true}
                             modules={[FreeMode, Navigation, Thumbs]}
-                            className="mySwiper"
+                            style={{ height: 150, marginTop: 16 }}
                         >
-                            <SwiperSlide>
-                                <img src="https://swiperjs.com/demos/images/nature-1.jpg" />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://swiperjs.com/demos/images/nature-2.jpg" />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://swiperjs.com/demos/images/nature-3.jpg" />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://swiperjs.com/demos/images/nature-4.jpg" />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://swiperjs.com/demos/images/nature-5.jpg" />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://swiperjs.com/demos/images/nature-6.jpg" />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://swiperjs.com/demos/images/nature-7.jpg" />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://swiperjs.com/demos/images/nature-8.jpg" />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://swiperjs.com/demos/images/nature-9.jpg" />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://swiperjs.com/demos/images/nature-10.jpg" />
-                            </SwiperSlide>
+                            {product.images.map((image) => (
+                                <SwiperSlide
+                                    key={image.id}
+                                    style={{
+                                        position: "relative",
+                                        height: "100%",
+                                    }}
+                                >
+                                    <Image
+                                        src={image.url}
+                                        alt={product.title}
+                                        layout="fill"
+                                        objectFit="cover"
+                                        objectPosition="center"
+                                    />
+                                </SwiperSlide>
+                            ))}
                         </Swiper>
                     </Box>
                     <Box textAlign={{ base: "center", md: "left" }}>
@@ -184,10 +169,14 @@ const Product = () => {
                             fontSize="xl"
                             color="gray.600"
                         >
-                            Decor, Nike
+                            {product.tags.map((tag, index) => (
+                                <Text key={index} textTransform="uppercase">
+                                    {tag}
+                                </Text>
+                            ))}
                         </Text>
                         <Heading size="xl" as="h1">
-                            Raglan Baseball Style shirt
+                            {product.title}
                         </Heading>
                         <Text
                             fontSize="4xl"
@@ -211,13 +200,7 @@ const Product = () => {
                             </HStack>
                         </Stack>
                         <Divider />
-                        <Text my="8">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing
-                            elit, sed do eiusmod tempor incididunt ut labore et
-                            dolore magna aliqua. Ut enim ad minim veniam, quis
-                            nostrud exercitation ullamco laboris nisi ut
-                            aliquip.
-                        </Text>
+                        <Text my="8">{product.description}</Text>
                         <Divider />
                         <TableContainer my="8">
                             <Table variant="simple" fontSize="sm">
@@ -304,3 +287,24 @@ const Product = () => {
 };
 
 export default Product;
+
+export const getStaticPaths = async () => {
+    const res = await medusaServer("/products");
+    const { products }: { products: TProduct[] } = res.data;
+    const paths = products.map((product) => ({
+        params: { id: product.id },
+    }));
+
+    return { paths, fallback: false };
+};
+
+export const getStaticProps = async ({
+    params,
+}: {
+    params: { id: string };
+}) => {
+    const res = await medusaServer(`/products/${params.id}`);
+    const { product } = await res.data;
+
+    return { props: { product } };
+};
