@@ -2,9 +2,10 @@ import React from "react";
 import { Box, useRadio } from "@chakra-ui/react";
 
 const RadioCard = (props) => {
-    const { getInputProps, getCheckboxProps } = useRadio(props);
+    const { getInputProps, getCheckboxProps, state } = useRadio(props);
 
     const input = getInputProps();
+
     const checkbox = getCheckboxProps();
 
     return (
@@ -17,17 +18,16 @@ const RadioCard = (props) => {
                 borderRadius="md"
                 boxShadow="md"
                 color="white"
-                backgroundColor={input.value}
+                backgroundColor={state.isChecked ? "primary.500" : "gray.500"}
                 _checked={{
                     borderColor: "black",
                 }}
                 _focus={{
                     boxShadow: "outline",
                 }}
-                px={5}
-                py={5}
+                p="2"
             >
-                {props.children}
+                {props.title}
             </Box>
         </Box>
     );

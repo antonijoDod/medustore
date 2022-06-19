@@ -26,6 +26,7 @@ import Image from "next/image";
 import NextLink from "next/link";
 import { medusaServer } from "src/utils/medusaServer";
 import { Product as TProduct } from "@medusajs/medusa";
+import { formatPrice } from "src/utils/prices";
 
 import {
     MdOutlineHorizontalRule,
@@ -46,8 +47,8 @@ interface ProductProps {
 }
 
 const Product: FC<ProductProps> = ({ product }) => {
+    // Sync images on slider, follow current image
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
-    const productColorOptions = ["white", "red", "blue", "green"];
 
     const { getRootProps, getRadioProps } = useRadioGroup({
         name: "productColor",
@@ -186,20 +187,39 @@ const Product: FC<ProductProps> = ({ product }) => {
                             $99.99
                         </Text>
                         <Divider />
-                        <Stack
-                            my="8"
-                            direction={{ base: "column", md: "row" }}
-                            alignItems="center"
-                        >
-                            <Box mr="4">COLORS: </Box>
-                            <HStack {...group}>
-                                {productColorOptions.map((value) => {
-                                    const radio = getRadioProps({ value });
-                                    return <RadioCard key={value} {...radio} />;
-                                })}
-                            </HStack>
-                        </Stack>
-                        <Divider />
+                        {product.options &&
+                            product.options.map((option) => (
+                                <>
+                                    <Stack
+                                        my="8"
+                                        direction={{
+                                            base: "column",
+                                            md: "row",
+                                        }}
+                                        alignItems="center"
+                                    >
+                                        <Box mr="4" textTransform="uppercase">
+                                            {option.title}:
+                                        </Box>
+                                        <HStack {...group}>
+                                            {option.values.map((value) => {
+                                                const radio = getRadioProps({
+                                                    title: value.value,
+                                                    value: value.variant_id,
+                                                });
+                                                return (
+                                                    <RadioCard
+                                                        key={value.id}
+                                                        {...radio}
+                                                    />
+                                                );
+                                            })}
+                                        </HStack>
+                                    </Stack>
+                                    <Divider />
+                                </>
+                            ))}
+
                         <Text my="8">{product.description}</Text>
                         <Divider />
                         <TableContainer my="8">
