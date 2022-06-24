@@ -52,9 +52,9 @@ const Footer = () => {
                             />
                             <Box>
                                 <Box color="gray.600" fontSize="sm">
-                                    Got Questions ? Call us 24/7!
+                                    Got Questions ? Call me 24/7!
                                 </Box>
-                                <Box fontSize="3xl">(0600) 874 548</Box>
+                                <Box fontSize="3xl">(+353) 89 950 8239</Box>
                             </Box>
                         </HStack>
                     </Box>
@@ -126,7 +126,15 @@ const Footer = () => {
                     mb="4"
                 >
                     <Box fontSize="sm">
-                        Copyright © 2022 BasicTheme. All Rights Reserved
+                        Copyright © 2022{" "}
+                        <Link
+                            color="teal.500"
+                            href="https://antonijo.com"
+                            isExternal
+                        >
+                            Antonijo
+                        </Link>
+                        . All Rights Reserved
                     </Box>
                     <HStack fontSize="xl">
                         <Icon as={MdOutlineFacebook} />
