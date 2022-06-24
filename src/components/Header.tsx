@@ -19,6 +19,8 @@ import {
     VStack,
     Text,
 } from "@chakra-ui/react";
+import { open, close } from "@redux/actions";
+import { useAppDispatch } from "@redux/store";
 
 import NextLink from "next/link";
 
@@ -92,6 +94,7 @@ const MenuIcons = ({
     isDesktop: boolean;
     onOpen: () => void;
 }) => {
+    const dispatch = useAppDispatch();
     return (
         <HStack>
             {isDesktop ? (
@@ -124,7 +127,8 @@ const MenuIcons = ({
                     />
                     <IconButton
                         icon={<MdOutlineShoppingCart />}
-                        aria-label="search"
+                        aria-label="mobile cart"
+                        onClick={() => dispatch(open())}
                         isRound
                         color="primary.500"
                         bg="primary.100"
@@ -140,7 +144,7 @@ const MenuIcons = ({
                 <>
                     <IconButton
                         icon={<MdOutlineShoppingCart />}
-                        aria-label="search"
+                        aria-label="mobile cart"
                         isRound
                         color="primary.500"
                         bg="primary.100"
@@ -154,7 +158,7 @@ const MenuIcons = ({
                     <IconButton
                         icon={<MdOutlineMenu />}
                         onClick={() => onOpen()}
-                        aria-label="search"
+                        aria-label="mobile menu"
                         isRound
                         color="primary.500"
                         bg="primary.100"
@@ -212,10 +216,6 @@ const Header: FC<HeaderProps> = ({ position, logoIsDark, textColor }) => {
     ];
 
     const [isScrolled, setIsScrolled] = useState<boolean>(false);
-    console.log(
-        "🚀 ~ file: Header.tsx ~ line 274 ~ Header ~ isScrolled",
-        isScrolled,
-    );
 
     /* Show or hide drawer with mobile navigation */
     const { isOpen, onOpen, onClose } = useDisclosure();

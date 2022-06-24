@@ -5,4 +5,7 @@ const BACKEND_URL =
 
 export const medusaServer = axios.create({
     baseURL: `${BACKEND_URL}/store`,
+    headers: {
+        "Content-Type": "application/json",
+    },
 });

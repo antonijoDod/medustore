@@ -1,6 +1,7 @@
+import React, { FC, useEffect } from "react";
 import { Box } from "@chakra-ui/react";
-import React, { FC } from "react";
-import { Header, Footer } from "@components";
+import { Header, Footer, Cart } from "@components";
+import { initNewCart } from "src/utils/cart";
 
 interface Props {
     children: React.ReactNode;
@@ -15,6 +16,10 @@ const Layout: FC<Props> = ({
     logoIsDark,
     children,
 }) => {
+    useEffect(() => {
+        initNewCart();
+    }, []);
+
     return (
         <>
             <Header
@@ -23,6 +28,7 @@ const Layout: FC<Props> = ({
                 textColor={headerTextColor}
             />
             <Box as="main">{children}</Box>
+            <Cart />
             <Footer />
         </>
     );

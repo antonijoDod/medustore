@@ -18,7 +18,7 @@ import {
     Tr,
     Td,
     IconButton,
-    Flex,
+    useToast,
     HStack,
 } from "@chakra-ui/react";
 
@@ -26,7 +26,8 @@ import Image from "next/image";
 import NextLink from "next/link";
 import { medusaServer } from "src/utils/medusaServer";
 import { Product as TProduct } from "@medusajs/medusa";
-import { formatPrice } from "src/utils/prices";
+
+import { useAddItemToCartMutation } from "@redux/services/cart";
 
 import {
     MdOutlineHorizontalRule,
@@ -41,20 +42,54 @@ import "swiper/css/navigation";
 import "swiper/css/thumbs";
 
 import { FreeMode, Navigation, Thumbs } from "swiper";
+import { formatPrice } from "src/utils/prices";
+
+import { useAppDispatch } from "@redux/store";
+import { open } from "@redux/actions";
 
 interface ProductProps {
     product: TProduct;
 }
 
 const Product: FC<ProductProps> = ({ product }) => {
+    const toast = useToast();
+    const dispatch = useAppDispatch();
+    const [addItemToCart] = useAddItemToCartMutation();
     // Sync images on slider, follow current image
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
+    const [currentVariant, setCurrentVariant] = useState(
+        product.options[0].values[0].variant_id,
+    );
 
     const { getRootProps, getRadioProps } = useRadioGroup({
         name: "productColor",
-        defaultValue: "white",
-        onChange: console.log,
+        defaultValue: product.options[0].values[0].variant_id,
+        onChange: (id) => setCurrentVariant(id),
     });
+
+    // Get current product variant and add to cart
+    const handleAddToCart = async () => {
+        const result = await addItemToCart({
+            variant_id: currentVariant,
+            quantity: 1,
+        });
+        if ("error" in result) {
+            toast({
+                title: "Something is wrong",
+                status: "warning",
+                isClosable: true,
+                duration: 5000,
+            });
+        } else {
+            toast({
+                title: "Item is added in cart",
+                status: "success",
+                isClosable: true,
+                duration: 5000,
+            });
+            dispatch(open());
+        }
+    };
 
     const group = getRootProps();
     return (
@@ -184,7 +219,14 @@ const Product: FC<ProductProps> = ({ product }) => {
                             fontWeight="light"
                             color="primary.500"
                         >
-                            $99.99
+                            {product.variants.length < 2
+                                ? formatPrice(product.variants[0])
+                                : formatPrice(
+                                      product.variants.filter(
+                                          (variant) =>
+                                              variant.id === currentVariant,
+                                      )[0],
+                                  )}
                         </Text>
                         <Divider />
                         {product.options &&
@@ -197,6 +239,7 @@ const Product: FC<ProductProps> = ({ product }) => {
                                             md: "row",
                                         }}
                                         alignItems="center"
+                                        key={option.id}
                                     >
                                         <Box mr="4" textTransform="uppercase">
                                             {option.title}:
@@ -219,7 +262,6 @@ const Product: FC<ProductProps> = ({ product }) => {
                                     <Divider />
                                 </>
                             ))}
-
                         <Text my="8">{product.description}</Text>
                         <Divider />
                         <TableContainer my="8">
@@ -261,7 +303,7 @@ const Product: FC<ProductProps> = ({ product }) => {
                                 </Tbody>
                             </Table>
                         </TableContainer>
-                        <HStack>
+                        {/*   <HStack>
                             <HStack bg="primary.100" p={2} rounded="full">
                                 <IconButton
                                     icon={<MdOutlineHorizontalRule />}
@@ -290,8 +332,9 @@ const Product: FC<ProductProps> = ({ product }) => {
                                     _active={{ bg: "primary.500" }}
                                 />
                             </Box>
-                        </HStack>
+                        </HStack> */}
                         <Button
+                            onClick={handleAddToCart}
                             rounded="none"
                             mt="8"
                             size="lg"

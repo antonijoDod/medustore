@@ -11,6 +11,17 @@ export function formatPrice(item: ProductVariant): string {
     }).format(item.prices[0].amount / 100);
 }
 
+/* Return price if you have only one price */
+export function formatSinglePrice(price: number): string {
+    const locale = "en-US";
+
+    return new Intl.NumberFormat(locale, {
+        style: "currency",
+        currency: "USD",
+        minimumFractionDigits: 2,
+    }).format(price / 100);
+}
+
 /* Get smallest price from product variants */
 export function getSmallestVariantPrice(variants: ProductVariant[]): string {
     const smallestPrice = variants.reduce((acc, curr) =>
