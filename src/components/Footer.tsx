@@ -54,7 +54,7 @@ const Footer = () => {
                                 <Box color="gray.600" fontSize="sm">
                                     Got Questions ? Call me 24/7!
                                 </Box>
-                                <Box fontSize="3xl">(+353) 89 950 8239</Box>
+                                <Box fontSize="xl">(+353) 89 950 8239</Box>
                             </Box>
                         </HStack>
                     </Box>
