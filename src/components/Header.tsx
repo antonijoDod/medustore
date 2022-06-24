@@ -146,6 +146,7 @@ const MenuIcons = ({
                         icon={<MdOutlineShoppingCart />}
                         aria-label="mobile cart"
                         isRound
+                        onClick={() => dispatch(open())}
                         color="primary.500"
                         bg="primary.100"
                         size="lg"
