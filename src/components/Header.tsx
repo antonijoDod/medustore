@@ -87,91 +87,83 @@ const MobileNav = () => {
     );
 };
 
-const MenuIcons = ({
-    isDesktop,
-    onOpen,
-}: {
-    isDesktop: boolean;
-    onOpen: () => void;
-}) => {
+const MenuIcons = ({ onOpen }: { onOpen: () => void }) => {
     const dispatch = useAppDispatch();
     return (
         <HStack>
-            {isDesktop ? (
-                <>
-                    <IconButton
-                        icon={<MdOutlineSearch />}
-                        aria-label="search"
-                        isRound
-                        color="primary.500"
-                        bg="primary.100"
-                        size="lg"
-                        fontSize="larger"
-                        _hover={{
-                            bg: "primary.500",
-                            color: "primary.100",
-                        }}
-                    />
-                    <IconButton
-                        icon={<MdOutlinePersonOutline />}
-                        aria-label="search"
-                        isRound
-                        color="primary.500"
-                        bg="primary.100"
-                        size="lg"
-                        fontSize="larger"
-                        _hover={{
-                            bg: "primary.500",
-                            color: "primary.100",
-                        }}
-                    />
-                    <IconButton
-                        icon={<MdOutlineShoppingCart />}
-                        aria-label="mobile cart"
-                        onClick={() => dispatch(open())}
-                        isRound
-                        color="primary.500"
-                        bg="primary.100"
-                        size="lg"
-                        fontSize="larger"
-                        _hover={{
-                            bg: "primary.500",
-                            color: "primary.100",
-                        }}
-                    />
-                </>
-            ) : (
-                <>
-                    <IconButton
-                        icon={<MdOutlineShoppingCart />}
-                        aria-label="mobile cart"
-                        isRound
-                        onClick={() => dispatch(open())}
-                        color="primary.500"
-                        bg="primary.100"
-                        size="lg"
-                        fontSize="larger"
-                        _hover={{
-                            bg: "primary.500",
-                            color: "primary.100",
-                        }}
-                    />
-                    <IconButton
-                        icon={<MdOutlineMenu />}
-                        onClick={() => onOpen()}
-                        aria-label="mobile menu"
-                        isRound
-                        color="primary.500"
-                        bg="primary.100"
-                        size="lg"
-                        fontSize="larger"
-                        _hover={{
-                            bg: "primary.500",
-                            color: "primary.100",
-                        }}
-                    />
-                </>
-            )}
+            <HStack display={{ base: "none", lg: "block" }}>
+                <IconButton
+                    icon={<MdOutlineSearch />}
+                    aria-label="search"
+                    isRound
+                    color="primary.500"
+                    bg="primary.100"
+                    size="lg"
+                    fontSize="larger"
+                    _hover={{
+                        bg: "primary.500",
+                        color: "primary.100",
+                    }}
+                />
+                <IconButton
+                    icon={<MdOutlinePersonOutline />}
+                    aria-label="search"
+                    isRound
+                    color="primary.500"
+                    bg="primary.100"
+                    size="lg"
+                    fontSize="larger"
+                    _hover={{
+                        bg: "primary.500",
+                        color: "primary.100",
+                    }}
+                />
+                <IconButton
+                    icon={<MdOutlineShoppingCart />}
+                    aria-label="mobile cart"
+                    onClick={() => dispatch(open())}
+                    isRound
+                    color="primary.500"
+                    bg="primary.100"
+                    size="lg"
+                    fontSize="larger"
+                    _hover={{
+                        bg: "primary.500",
+                        color: "primary.100",
+                    }}
+                />
+            </HStack>
+            {/* Mobile screen */}
+            <HStack display={{ base: "block", lg: "none" }}>
+                <IconButton
+                    icon={<MdOutlineShoppingCart />}
+                    aria-label="mobile cart"
+                    isRound
+                    onClick={() => dispatch(open())}
+                    color="primary.500"
+                    bg="primary.100"
+                    size="lg"
+                    fontSize="larger"
+                    _hover={{
+                        bg: "primary.500",
+                        color: "primary.100",
+                    }}
+                />
+                <IconButton
+                    icon={<MdOutlineMenu />}
+                    onClick={() => onOpen()}
+                    aria-label="mobile menu"
+                    isRound
+                    color="primary.500"
+                    bg="primary.100"
+                    size="lg"
+                    fontSize="larger"
+                    _hover={{
+                        bg: "primary.500",
+                        color: "primary.100",
+                    }}
+                />
+            </HStack>
         </HStack>
     );
 };
@@ -223,6 +215,7 @@ const Header: FC<HeaderProps> = ({ position, logoIsDark, textColor }) => {
 
     /* Use for decide if header navigation for mobile or desktop use */
     const [isDesktop] = useMediaQuery("(min-width: 996px)");
+    console.log("🚀 ~ file: Header.tsx ~ line 226 ~ isDesktop", isDesktop);
 
     const handleScroll = () => {
         const position = window.pageYOffset;
@@ -293,7 +286,7 @@ const Header: FC<HeaderProps> = ({ position, logoIsDark, textColor }) => {
                                 />
                             )}
                         </HStack>
-                        <MenuIcons isDesktop={isDesktop} onOpen={onOpen} />
+                        <MenuIcons onOpen={onOpen} />
                     </Stack>
                 </Container>
             </Box>
@@ -303,9 +296,3 @@ const Header: FC<HeaderProps> = ({ position, logoIsDark, textColor }) => {
 };
 
 export default Header;
-
-// Header --- define logo src, color mode, sticky, navigation and all settings in Header component
-// Can be sticky or absolute
-// Can be light or dark
-// It has own color mode
-// It has own logo src
