@@ -1,13 +1,16 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Cart } from "@medusajs/medusa";
 
+const BACKEND_URL =
+    process.env.NEXT_PUBLIC_MEDUSA_URL || "http://localhost:9000";
+
 type CartResponse = {
     cart: Cart;
 };
 
 export const cartApi = createApi({
     reducerPath: "cartApi",
-    baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:9000/store/carts" }),
+    baseQuery: fetchBaseQuery({ baseUrl: `${BACKEND_URL}/store/carts` }),
     tagTypes: ["CartItems"],
     endpoints: (builder) => ({
         getCartItems: builder.query<CartResponse, string>({
