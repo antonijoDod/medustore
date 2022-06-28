@@ -26,11 +26,11 @@ const Footer = () => {
             <Container maxW="container.xl">
                 <SimpleGrid columns={{ base: 1, sm: 2, md: 4 }} gap="4">
                     <Box>
-                        <Box mb="8">
+                        <Box mb="4">
                             <Image
-                                src="/assets/images/logo-black.png"
-                                height="22"
-                                width="75"
+                                src="/assets/svg/logo-black.svg"
+                                height="36"
+                                width="174"
                                 layout="fixed"
                             />
                         </Box>
