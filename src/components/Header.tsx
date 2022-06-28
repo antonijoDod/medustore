@@ -215,7 +215,6 @@ const Header: FC<HeaderProps> = ({ position, logoIsDark, textColor }) => {
 
     /* Use for decide if header navigation for mobile or desktop use */
     const [isDesktop] = useMediaQuery("(min-width: 996px)");
-    console.log("🚀 ~ file: Header.tsx ~ line 226 ~ isDesktop", isDesktop);
 
     const handleScroll = () => {
         const position = window.pageYOffset;
@@ -244,6 +243,7 @@ const Header: FC<HeaderProps> = ({ position, logoIsDark, textColor }) => {
                 position={isScrolled ? "fixed" : position}
                 bgColor={isScrolled ? "white" : bgColor}
                 zIndex="999"
+                boxShadow="0 0 15px rgb(0 0 0 / 10%)"
             >
                 <Container maxW="container.xl">
                     <Stack

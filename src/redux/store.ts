@@ -2,6 +2,8 @@ import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { pokemonApi } from "./services/pokemon";
 import { cartApi } from "./services/cart";
+import { regionApi } from "./services/region";
+import { shippingApi } from "./services/shipping";
 import { useDispatch } from "react-redux";
 
 import rootReducer from "./reducers";
@@ -11,9 +13,15 @@ export const store = configureStore({
         rootReducer,
         [pokemonApi.reducerPath]: pokemonApi.reducer,
         [cartApi.reducerPath]: cartApi.reducer,
+        [regionApi.reducerPath]: regionApi.reducer,
+        [shippingApi.reducerPath]: shippingApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(cartApi.middleware),
+        getDefaultMiddleware().concat(
+            cartApi.middleware,
+            regionApi.middleware,
+            shippingApi.middleware,
+        ),
 });
 
 setupListeners(store.dispatch);

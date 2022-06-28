@@ -1,4 +1,5 @@
 import { extendTheme } from "@chakra-ui/react";
+import { StepsStyleConfig as Steps } from "chakra-ui-steps";
 
 import styles from "./styles";
 
@@ -17,6 +18,9 @@ import fonts from "./foundations/fonts";
 
 const overrides = {
     ...styles,
+    components: {
+        Steps,
+    },
     colors,
     fontSizes,
     fonts,

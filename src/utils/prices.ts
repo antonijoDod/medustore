@@ -2,7 +2,7 @@ import { ProductVariant } from "@medusajs/medusa";
 
 /* Convert price */
 export function formatPrice(item: ProductVariant): string {
-    const locale = "en-US";
+    const locale = "uk";
 
     return new Intl.NumberFormat(locale, {
         style: "currency",
@@ -13,11 +13,11 @@ export function formatPrice(item: ProductVariant): string {
 
 /* Return price if you have only one price */
 export function formatSinglePrice(price: number): string {
-    const locale = "en-US";
+    const locale = "uk";
 
     return new Intl.NumberFormat(locale, {
         style: "currency",
-        currency: "USD",
+        currency: "EUR",
         minimumFractionDigits: 2,
     }).format(price / 100);
 }

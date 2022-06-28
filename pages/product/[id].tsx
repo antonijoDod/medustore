@@ -52,6 +52,7 @@ interface ProductProps {
 }
 
 const Product: FC<ProductProps> = ({ product }) => {
+    console.log("🚀 ~ file: [id].tsx ~ line 55 ~ product", product);
     const toast = useToast();
     const dispatch = useAppDispatch();
     const [addItemToCart] = useAddItemToCartMutation();
@@ -205,11 +206,14 @@ const Product: FC<ProductProps> = ({ product }) => {
                             fontSize="xl"
                             color="gray.600"
                         >
-                            {product.tags.map((tag, index) => (
+                            {/*  {product.tags.map((tag, index) => (
                                 <Text key={index} textTransform="uppercase">
                                     {tag}
                                 </Text>
-                            ))}
+                            ))} */}
+                            <Text textTransform="uppercase">
+                                {product.collection && product.collection.title}
+                            </Text>
                         </Text>
                         <Heading size="xl" as="h1">
                             {product.title}
@@ -274,9 +278,21 @@ const Product: FC<ProductProps> = ({ product }) => {
                                             color="gray.900"
                                             paddingLeft="0"
                                         >
-                                            Brands:
+                                            Tags:
                                         </Td>
-                                        <Td color="gray.600">Nike</Td>
+                                        <Td color="gray.600">
+                                            <HStack>
+                                                {product.tags?.map((tag) => (
+                                                    <Button
+                                                        size="xs"
+                                                        key={tag.id}
+                                                        colorScheme="blackAlpha"
+                                                    >
+                                                        {tag.value}
+                                                    </Button>
+                                                ))}
+                                            </HStack>
+                                        </Td>
                                     </Tr>
                                     <Tr>
                                         <Td

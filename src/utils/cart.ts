@@ -3,7 +3,11 @@ import { medusaServer } from "src/utils/medusaServer";
 export const initNewCart = async () => {
     const cartInStorage = localStorage.getItem("cart-id");
 
-    if (cartInStorage === undefined || cartInStorage === null) {
+    if (
+        cartInStorage === undefined ||
+        cartInStorage === null ||
+        cartInStorage === ""
+    ) {
         const response = await medusaServer.post("/carts");
 
         const { cart } = await response.data;

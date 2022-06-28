@@ -9,6 +9,10 @@ export { default as RadioCard } from "./RadioCard";
 export { default as Cart } from "./Cart";
 export { default as CartItem } from "./CartItem";
 
+export { default as CustomerDetails } from "./checkout/customer-details";
+export { default as OrderDetails } from "./checkout/order-details";
+export { default as PaymentDetails } from "./checkout/payment-details";
+
 export { Logo } from "./logo";
 export { Main } from "./main";
 export { Cards } from "./cards";

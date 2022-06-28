@@ -1,4 +1,5 @@
 import React from "react";
+import NextLink from "next/link";
 import { useSelector } from "react-redux";
 import {
     Drawer,
@@ -69,7 +70,14 @@ const Cart = () => {
                     >
                         Continue shopping
                     </Button>
-                    <Button colorScheme="primary">Checkout</Button>
+                    <NextLink href="/checkout">
+                        <Button
+                            colorScheme="primary"
+                            onClick={() => dispatch(close())}
+                        >
+                            Checkout
+                        </Button>
+                    </NextLink>
                 </DrawerFooter>
             </DrawerContent>
         </Drawer>
