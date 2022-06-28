@@ -1,5 +1,6 @@
 import React, { useState, useEffect, FC } from "react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import {
     Box,
     Container,
@@ -32,12 +33,17 @@ import {
 } from "react-icons/md";
 
 interface DesktopNavProps {
-    textColor?: string;
+    isHomePage?: boolean;
 }
 
-const DesktopNav: FC<DesktopNavProps> = ({ textColor = "black" }) => {
+const DesktopNav: FC<DesktopNavProps> = ({ isHomePage }) => {
     return (
-        <Box as="nav" fontWeight="500" fontSize="sm" color={textColor}>
+        <Box
+            as="nav"
+            fontWeight="500"
+            fontSize="sm"
+            color={isHomePage ? "white" : "gray.800"}
+        >
             <Link
                 as={NextLink}
                 href="/"
@@ -92,19 +98,6 @@ const MenuIcons = ({ onOpen }: { onOpen: () => void }) => {
     return (
         <HStack>
             <HStack display={{ base: "none", lg: "block" }}>
-                <IconButton
-                    icon={<MdOutlineSearch />}
-                    aria-label="search"
-                    isRound
-                    color="primary.500"
-                    bg="primary.100"
-                    size="lg"
-                    fontSize="larger"
-                    _hover={{
-                        bg: "primary.500",
-                        color: "primary.100",
-                    }}
-                />
                 <IconButton
                     icon={<MdOutlinePersonOutline />}
                     aria-label="search"
@@ -192,6 +185,98 @@ const HeaderDrawer = ({
     );
 };
 
+const TallHeader = ({ onOpen }) => {
+    const router = useRouter();
+
+    const isHomePage = router.route === "/" ? true : false;
+
+    return (
+        <Box
+            w="full"
+            display="flex"
+            boxShadow="0 0 15px rgb(0 0 0 / 10%)"
+            h="136"
+            zIndex={999}
+            position={isHomePage ? "absolute" : "inherit"}
+        >
+            <Container maxW="container.xl">
+                <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    h="full"
+                >
+                    <HStack textTransform="uppercase">
+                        <Box mr="4">
+                            {isHomePage ? (
+                                <Image
+                                    src="/assets/svg/logo-white.svg"
+                                    layout="fixed"
+                                    height="36"
+                                    width="174"
+                                    alt="White logo"
+                                />
+                            ) : (
+                                <Image
+                                    src="/assets/svg/logo-black.svg"
+                                    layout="fixed"
+                                    height="36"
+                                    width="174"
+                                    alt="White logo"
+                                />
+                            )}
+                        </Box>
+                        <Box display={{ base: "none", lg: "block" }}>
+                            <DesktopNav isHomePage={isHomePage} />
+                        </Box>
+                    </HStack>
+                    <MenuIcons onOpen={onOpen} />
+                </Stack>
+            </Container>
+        </Box>
+    );
+};
+
+const SmallHeader = ({ onOpen, isScrolled }) => {
+    return (
+        <Box
+            w="full"
+            display="flex"
+            boxShadow="0 0 15px rgb(0 0 0 / 10%)"
+            h="80px"
+            position="fixed"
+            zIndex="999"
+            bg="whiteAlpha.900"
+            top="0"
+        >
+            <Container maxW="container.xl">
+                <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    h="full"
+                >
+                    <HStack textTransform="uppercase">
+                        <Box mr="4">
+                            <Image
+                                src="/assets/svg/logo-black.svg"
+                                layout="fixed"
+                                height="36"
+                                width="174"
+                                alt="White logo"
+                            />
+                        </Box>
+                        <Box display={{ base: "none", lg: "block" }}>
+                            <DesktopNav />
+                        </Box>
+                    </HStack>
+                    <MenuIcons onOpen={onOpen} />
+                </Stack>
+            </Container>
+        </Box>
+    );
+};
+
 interface HeaderProps {
     position?: "absolute" | "inherit" | "fixed";
     logoIsDark?: boolean;
@@ -209,6 +294,7 @@ const Header: FC<HeaderProps> = ({ position, logoIsDark, textColor }) => {
     ];
 
     const [isScrolled, setIsScrolled] = useState<boolean>(false);
+    console.log("🚀 ~ file: Header.tsx ~ line 270 ~ isScrolled", isScrolled);
 
     /* Show or hide drawer with mobile navigation */
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -218,6 +304,10 @@ const Header: FC<HeaderProps> = ({ position, logoIsDark, textColor }) => {
 
     const handleScroll = () => {
         const position = window.pageYOffset;
+        console.log(
+            "🚀 ~ file: Header.tsx ~ line 279 ~ handleScroll ~ position",
+            position,
+        );
         if (position > 136) {
             setIsScrolled(true);
         } else {
@@ -233,63 +323,13 @@ const Header: FC<HeaderProps> = ({ position, logoIsDark, textColor }) => {
         };
     }, []);
 
-    /* scrollPosition < 136 */
     return (
         <>
-            <Box
-                height={isScrolled ? "80px" : "136px"}
-                w="full"
-                display="flex"
-                position={isScrolled ? "fixed" : position}
-                bgColor={isScrolled ? "white" : bgColor}
-                zIndex="999"
-                boxShadow="0 0 15px rgb(0 0 0 / 10%)"
-            >
-                <Container maxW="container.xl">
-                    <Stack
-                        direction="row"
-                        alignItems="center"
-                        justifyContent="space-between"
-                        h="full"
-                    >
-                        <HStack textTransform="uppercase">
-                            <Box mr="4">
-                                {isScrolled ? (
-                                    <Image
-                                        src="/assets/svg/logo-black.svg"
-                                        layout="fixed"
-                                        height="36"
-                                        width="174"
-                                        alt="White logo"
-                                    />
-                                ) : logoIsDark ? (
-                                    <Image
-                                        src="/assets/svg/logo-black.svg"
-                                        layout="fixed"
-                                        height="36"
-                                        width="174"
-                                        alt="White logo"
-                                    />
-                                ) : (
-                                    <Image
-                                        src="/assets/svg/logo-white.svg"
-                                        layout="fixed"
-                                        height="36"
-                                        width="174"
-                                        alt="White logo"
-                                    />
-                                )}
-                            </Box>
-                            {isDesktop && (
-                                <DesktopNav
-                                    textColor={isScrolled ? "" : textColor}
-                                />
-                            )}
-                        </HStack>
-                        <MenuIcons onOpen={onOpen} />
-                    </Stack>
-                </Container>
-            </Box>
+            <TallHeader onOpen={onOpen} />
+            {isScrolled && (
+                <SmallHeader isScrolled={isScrolled} onOpen={onOpen} />
+            )}
+
             <HeaderDrawer isOpen={isOpen} onClose={onClose} />
         </>
     );
