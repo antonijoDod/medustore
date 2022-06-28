@@ -194,7 +194,6 @@ const TallHeader = ({ onOpen }) => {
         <Box
             w="full"
             display="flex"
-            boxShadow="0 0 15px rgb(0 0 0 / 10%)"
             h="136"
             zIndex={999}
             position={isHomePage ? "absolute" : "inherit"}
