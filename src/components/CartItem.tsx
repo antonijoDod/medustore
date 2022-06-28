@@ -58,7 +58,15 @@ const CartItem: FC<CartItemInterface> = ({ data }) => {
     return (
         <HStack justifyContent="space-between" py="4">
             <HStack>
-                <Image src={data.thumbnail} height="75" width="75" />
+                <Image
+                    src={
+                        data.thumbnail
+                            ? data.thumbnail
+                            : "/assets/images/placeholder_300x300.png"
+                    }
+                    height="75"
+                    width="75"
+                />
                 <Box>
                     <Heading fontSize="md">{data.title}</Heading>
                     <Box>Variant: {data.variant.title}</Box>

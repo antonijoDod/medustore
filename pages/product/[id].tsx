@@ -52,7 +52,6 @@ interface ProductProps {
 }
 
 const Product: FC<ProductProps> = ({ product }) => {
-    console.log("🚀 ~ file: [id].tsx ~ line 55 ~ product", product);
     const toast = useToast();
     const dispatch = useAppDispatch();
     const [addItemToCart] = useAddItemToCartMutation();
@@ -141,7 +140,14 @@ const Product: FC<ProductProps> = ({ product }) => {
                     {/* Left side */}
                     <Box>
                         {product.images.length === 0 && (
-                            <Image src="/assets/images/placeholder_300x300.png" />
+                            <Box position="relative" height="100%">
+                                <Image
+                                    src="/assets/images/placeholder_300x300.png"
+                                    layout="fill"
+                                    objectFit="cover"
+                                    objectPosition="center"
+                                />
+                            </Box>
                         )}
                         <Swiper
                             style={{
