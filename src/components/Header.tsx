@@ -282,8 +282,7 @@ interface HeaderProps {
     textColor?: string;
 }
 
-const Header: FC<HeaderProps> = ({ position, logoIsDark, textColor }) => {
-    const bgColor = "transparent";
+const Header: FC<HeaderProps> = () => {
     const menu = [
         { id: 1, name: "Home", link: "/" },
         { id: 2, name: "Shop", link: "/shop" },
