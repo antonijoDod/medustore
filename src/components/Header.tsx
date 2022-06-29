@@ -8,7 +8,6 @@ import {
     IconButton,
     Link,
     Stack,
-    useMediaQuery,
     Drawer,
     DrawerOverlay,
     DrawerBody,
@@ -20,79 +19,80 @@ import {
     VStack,
     Text,
 } from "@chakra-ui/react";
-import { open, close } from "@redux/actions";
+import { open } from "@redux/actions";
 import { useAppDispatch } from "@redux/store";
 
 import NextLink from "next/link";
 
 import {
-    MdOutlineSearch,
     MdOutlinePersonOutline,
     MdOutlineShoppingCart,
     MdOutlineMenu,
 } from "react-icons/md";
 
+type TMenu = {
+    id: number;
+    name: string;
+    link: string;
+};
+
 interface DesktopNavProps {
     isHomePage?: boolean;
+    menu: TMenu[];
 }
 
-const DesktopNav: FC<DesktopNavProps> = ({ isHomePage }) => {
+// Desktop menu
+const DesktopNav: FC<DesktopNavProps> = ({ isHomePage, menu }) => {
+    const router = useRouter();
     return (
-        <Box
+        <HStack
             as="nav"
             fontWeight="500"
             fontSize="sm"
-            color={isHomePage ? "white" : "gray.800"}
+            color={isHomePage ? "white" : "gray.600"}
         >
-            <Link
-                as={NextLink}
-                href="/"
-                p="4"
-                _hover={{ color: "primary.500" }}
-            >
-                Home
-            </Link>
-            <Link p="4" _hover={{ color: "primary.500" }}>
-                Shop
-            </Link>
-            <Link
-                as={NextLink}
-                href="/product/1"
-                p="4"
-                _hover={{ color: "primary.500" }}
-            >
-                Product
-            </Link>
-            <Link p="4" _hover={{ color: "primary.500" }}>
-                About us
-            </Link>
-            <Link p="4" _hover={{ color: "primary.500" }}>
-                Contact
-            </Link>
-        </Box>
+            {menu.map((item) => (
+                <NextLink key={item.id} href={item.link}>
+                    <Link
+                        p="2"
+                        _hover={{ color: "primary.500" }}
+                        color={
+                            router.pathname === item.link ? "primary.500" : ""
+                        }
+                    >
+                        {item.name}
+                    </Link>
+                </NextLink>
+            ))}
+        </HStack>
     );
 };
 
-const MobileNav = () => {
+// Mobile menu
+const MobileNav: FC<{ menu: TMenu[] }> = ({ menu }) => {
+    const router = useRouter();
     return (
         <VStack as="nav" fontWeight="500" fontSize="sm">
-            <Link p="4" _hover={{ color: "primary.500" }}>
-                Home
-            </Link>
-            <Link p="4" _hover={{ color: "primary.500" }}>
-                Shop
-            </Link>
-            <Link p="4" _hover={{ color: "primary.500" }}>
-                About us
-            </Link>
-            <Link p="4" _hover={{ color: "primary.500" }}>
-                Contact
-            </Link>
+            {menu.map((item) => (
+                <NextLink key={item.id} href={item.link}>
+                    <Link
+                        p="2"
+                        _hover={{ color: "primary.500" }}
+                        color={
+                            router.pathname === item.link ? "primary.500" : ""
+                        }
+                    >
+                        {item.name}
+                    </Link>
+                </NextLink>
+            ))}
+
             <Button>Search</Button>
         </VStack>
     );
 };
 
+// Action icons in header
 const MenuIcons = ({ onOpen }: { onOpen: () => void }) => {
     const dispatch = useAppDispatch();
     return (
@@ -126,7 +126,6 @@ const MenuIcons = ({ onOpen }: { onOpen: () => void }) => {
                     }}
                 />
             </HStack>
-            {/* Mobile screen */}
             <HStack display={{ base: "block", lg: "none" }}>
                 <IconButton
                     icon={<MdOutlineShoppingCart />}
@@ -161,12 +160,15 @@ const MenuIcons = ({ onOpen }: { onOpen: () => void }) => {
     );
 };
 
+// Aside drawer with navigation menu
 const HeaderDrawer = ({
     isOpen,
     onClose,
+    menu,
 }: {
     isOpen: boolean;
     onClose: () => void;
+    menu: TMenu[];
 }) => {
     return (
         <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
@@ -178,16 +180,23 @@ const HeaderDrawer = ({
                 </DrawerHeader>
 
                 <DrawerBody>
-                    <MobileNav />
+                    <MobileNav menu={menu} />
                 </DrawerBody>
             </DrawerContent>
         </Drawer>
     );
 };
 
-const TallHeader = ({ onOpen }) => {
+interface IHeader {
+    onOpen: () => void;
+    menu: TMenu[];
+}
+
+// First header when page is loaded
+const TallHeader: FC<IHeader> = ({ onOpen, menu }) => {
     const router = useRouter();
 
+    // If is front page change styling for header
     const isHomePage = router.route === "/" ? true : false;
 
     return (
@@ -226,7 +235,7 @@ const TallHeader = ({ onOpen }) => {
                             )}
                         </Box>
                         <Box display={{ base: "none", lg: "block" }}>
-                            <DesktopNav isHomePage={isHomePage} />
+                            <DesktopNav isHomePage={isHomePage} menu={menu} />
                         </Box>
                     </HStack>
                     <MenuIcons onOpen={onOpen} />
@@ -236,7 +245,8 @@ const TallHeader = ({ onOpen }) => {
     );
 };
 
-const SmallHeader = ({ onOpen, isScrolled }) => {
+// Shrinked header when ise scroll for 136px
+const SmallHeader: FC<IHeader> = ({ onOpen, menu }) => {
     return (
         <Box
             w="full"
@@ -266,7 +276,7 @@ const SmallHeader = ({ onOpen, isScrolled }) => {
                             />
                         </Box>
                         <Box display={{ base: "none", lg: "block" }}>
-                            <DesktopNav />
+                            <DesktopNav menu={menu} />
                         </Box>
                     </HStack>
                     <MenuIcons onOpen={onOpen} />
@@ -276,36 +286,22 @@ const SmallHeader = ({ onOpen, isScrolled }) => {
     );
 };
 
-interface HeaderProps {
-    position?: "absolute" | "inherit" | "fixed";
-    logoIsDark?: boolean;
-    textColor?: string;
-}
-
-const Header: FC<HeaderProps> = () => {
+// Main Header comonent
+const Header: FC = () => {
     const menu = [
         { id: 1, name: "Home", link: "/" },
         { id: 2, name: "Shop", link: "/shop" },
-        { id: 3, name: "Product", link: "/product/1" },
-        { id: 4, name: "About us", link: "/about-us" },
-        { id: 5, name: "Contact", link: "/contact" },
+        { id: 3, name: "About us", link: "/about-us" },
+        { id: 4, name: "Contact", link: "/contact" },
     ];
 
     const [isScrolled, setIsScrolled] = useState<boolean>(false);
-    console.log("🚀 ~ file: Header.tsx ~ line 270 ~ isScrolled", isScrolled);
 
     /* Show or hide drawer with mobile navigation */
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    /* Use for decide if header navigation for mobile or desktop use */
-    const [isDesktop] = useMediaQuery("(min-width: 996px)");
-
     const handleScroll = () => {
         const position = window.pageYOffset;
-        console.log(
-            "🚀 ~ file: Header.tsx ~ line 279 ~ handleScroll ~ position",
-            position,
-        );
         if (position > 136) {
             setIsScrolled(true);
         } else {
@@ -323,12 +319,10 @@ const Header: FC<HeaderProps> = () => {
 
     return (
         <>
-            <TallHeader onOpen={onOpen} />
-            {isScrolled && (
-                <SmallHeader isScrolled={isScrolled} onOpen={onOpen} />
-            )}
+            <TallHeader onOpen={onOpen} menu={menu} />
+            {isScrolled && <SmallHeader onOpen={onOpen} menu={menu} />}
 
-            <HeaderDrawer isOpen={isOpen} onClose={onClose} />
+            <HeaderDrawer isOpen={isOpen} onClose={onClose} menu={menu} />
         </>
     );
 };

@@ -12,6 +12,7 @@ import {
     Select,
     Text,
     Divider,
+    useToast,
 } from "@chakra-ui/react";
 
 import {
@@ -39,6 +40,7 @@ type TCustomerDetails = {
 };
 
 const CustomerDetails = ({ onNextStep, onPrevStep, activeStep, steps }) => {
+    const toast = useToast();
     const [updateCart] = useUpdateCartMutation();
     const {
         data: cartData,
@@ -75,7 +77,15 @@ const CustomerDetails = ({ onNextStep, onPrevStep, activeStep, steps }) => {
             },
             email: data.email,
         });
-        onNextStep();
+
+        if ("error" in result) {
+            toast({
+                title: "Something is wrong",
+                status: "error",
+            });
+        } else {
+            onNextStep();
+        }
     };
 
     return (
